@@ -4,6 +4,40 @@
 </head>
 
 <body>
-<h1>Web Share Example</h1>
+    <h1>Web Share Example</h1>
+
+    <div class="container">
+        <button onclick="shareTextAndURL()">Share URL</button>
+        <button onclick="shareFiles()">Share URL</button>
+    </div>
+    <script>
+
+        function shareTextAndURL(){
+            if (navigator.share) {
+            navigator.share({
+                title: 'Check out entangled cognition.',
+                text: 'Check out entangled cognition.',
+                url: 'https://entangledcognition.dev/',
+            })
+                .then(() => alert('Successful share'))
+                .catch((error) => alert('Error sharing', error));
+        }
+        }
+
+        function shareFiles(){
+            if (navigator.share && navigator.canShare) {
+            navigator.share({
+                files: [new File()],
+                title: 'Check out entangled cognition.',
+                text: 'Check out entangled cognition.',
+                url: 'https://entangledcognition.dev/',
+            })
+                .then(() => alert('Successful share'))
+                .catch((error) => alert('Error sharing', error));
+        }
+        }
+     
+    </script>
 </body>
+
 </html>
