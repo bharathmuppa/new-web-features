@@ -97,7 +97,7 @@
                 }
 
                 try {
-                    await navigator.share({  files, title, text, url });
+                    await navigator.share({  files: files.files, title, text, url });
                     alert('Successfully sent share');
                 } catch (error) {
                     alert('Error sharing: ' + error);
