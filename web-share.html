@@ -1,43 +1,112 @@
+<!DOCTYPE html>
 <html>
 
 <head>
+    <title>
+        Web Share Sample
+    </title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+        body {
+            background: #ff9800;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            align-items: stretch;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        h1 {
+            padding: 10px;
+        }
+
+        .container {
+            background: #ff5722;
+            flex-basis: auto;
+            flex-grow: 1;
+            padding: 10px;
+            align-items: stretch;
+            justify-content: space-evenly;
+        }
+
+        .inputs{
+            flex-direction: row;
+            display: flex;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Web Share Example</h1>
-
+    <h1>
+        Web Share
+    </h1>
     <div class="container">
-        <button onclick="shareTextAndURL()">Share URL</button>
-        <button onclick="shareFiles()">Share URL</button>
-    </div>
-    <script>
 
-        function shareTextAndURL(){
-            if (navigator.share) {
-            navigator.share({
-                title: 'Check out entangled cognition.',
-                text: 'Check out entangled cognition.',
-                url: 'https://entangledcognition.dev/',
-            })
-                .then(() => alert('Successful share'))
-                .catch((error) => alert('Error sharing', error));
-        }
-        }
+        <div class"inputs">
+            <input id="title" value="The Title" size="40">
+            <input id="text" value="The message" size="40">
+            <input id="url" value="https://example.com" size="40">
+            <input id="files" type="file" multiple>
+        </div>
+        <div class="actions">
 
-        function shareFiles(){
-            if (navigator.share && navigator.canShare) {
-            navigator.share({
-                files: [new File()],
-                title: 'Check out entangled cognition.',
-                text: 'Check out entangled cognition.',
-                url: 'https://entangledcognition.dev/',
-            })
-                .then(() => alert('Successful share'))
-                .catch((error) => alert('Error sharing', error));
-        }
-        }
-     
-    </script>
+            <button onclick="webShare()">share with Files</button>
+            <button onclick="webShareOnlyUrl()">share without files</button>
+        </div>
+
+
+
+
+        <script>
+            'use strict';
+
+
+            function checkBasicFileShare() {
+
+                const txt = new Blob(['Hello, world!'], { type: 'text/plain' });
+                // XXX: Blob support? https://github.com/w3c/web-share/issues/181
+                const file = new File([txt], "test.txt");
+                return navigator.canShare({ files: [file] });
+            }
+
+            async function webShare() {
+                const title_input = document.querySelector('#title');
+                const text_input = document.querySelector('#text');
+                const url_input = document.querySelector('#url');
+
+                const file_input = document.querySelector('#files');
+
+
+                if (file_input && file_input.length > 0) {
+                    if (!navigator.canShare) {
+                        alert('Warning: canShare is not supported. File sharing may not be supported at all.');
+                    } else if (!checkBasicFileShare()) {
+                        alert('Error: File sharing is not supported in this browser.');
+
+                        return;
+                    } else if (!navigator.canShare({ file_input })) {
+                        alert('Error: share() does not support the given files');
+                        for (const file of file_input) {
+                            alert(`File info: name - ${file.name}, size ${file.size}, type ${file.type}`);
+                        }
+                        return;
+                    }
+                }
+
+                try {
+                    await navigator.share({ files, title, text, url });
+                    alert('Successfully sent share');
+                } catch (error) {
+                    alert('Error sharing: ' + error);
+                }
+
+            }
+
+
+        </script>
 </body>
 
 </html>
