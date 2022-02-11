@@ -7,7 +7,8 @@
     </title>
     <meta name="viewport" content="width=device-width">
     <style>
-        body {
+        body,
+        html {
             background: #ff9800;
             color: black;
             display: flex;
@@ -32,9 +33,21 @@
             justify-content: space-evenly;
         }
 
-        .inputs{
-            flex-direction: row;
+        .inputs {
             display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .inputs input {
+            margin-bottom: 0.5rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: row;
         }
     </style>
 </head>
@@ -46,9 +59,9 @@
     <div class="container">
 
         <div class"inputs">
-            <input id="title" value="The Title" size="40">
-            <input id="text" value="The message" size="40">
-            <input id="url" value="https://example.com" size="40">
+            <input id="title" placeholder="Title" size="40">
+            <input id="text" placeholder="enter text to be displayed" size="40">
+            <input id="url" placeholder="https://entangledcognition.com" size="40">
             <input id="files" type="file" multiple>
         </div>
         <div class="actions">
@@ -72,10 +85,23 @@
                 return navigator.canShare({ files: [file] });
             }
 
+            async function webShareOnlyUrl() {
+                const title = document.querySelector('#title').value;
+                const text = document.querySelector('#text').value;
+                const url = document.querySelector('#url').value;
+                try {
+                    await navigator.share({ title, text, url });
+                    alert('Successfully sent share');
+                } catch (error) {
+                    alert('Error sharing: ' + error);
+                }
+
+            }
+
             async function webShare() {
-                const title = document.querySelector('#title');
-                const text = document.querySelector('#text');
-                const url = document.querySelector('#url');
+                const title = document.querySelector('#title').value;
+                const text = document.querySelector('#text').value;
+                const url = document.querySelector('#url').value;
 
                 const files = document.querySelector('#files');
 
@@ -97,7 +123,7 @@
                 }
 
                 try {
-                    await navigator.share({  files: files.files, title, text, url });
+                    await navigator.share({ files: files.files, title, text, url });
                     alert('Successfully sent share');
                 } catch (error) {
                     alert('Error sharing: ' + error);
