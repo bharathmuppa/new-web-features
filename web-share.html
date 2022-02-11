@@ -73,23 +73,23 @@
             }
 
             async function webShare() {
-                const title_input = document.querySelector('#title');
-                const text_input = document.querySelector('#text');
-                const url_input = document.querySelector('#url');
+                const title = document.querySelector('#title');
+                const text = document.querySelector('#text');
+                const url = document.querySelector('#url');
 
-                const file_input = document.querySelector('#files');
+                const files = document.querySelector('#files');
 
 
-                if (file_input && file_input.length > 0) {
+                if (files && files.length > 0) {
                     if (!navigator.canShare) {
                         alert('Warning: canShare is not supported. File sharing may not be supported at all.');
                     } else if (!checkBasicFileShare()) {
                         alert('Error: File sharing is not supported in this browser.');
 
                         return;
-                    } else if (!navigator.canShare({ file_input })) {
+                    } else if (!navigator.canShare({ files })) {
                         alert('Error: share() does not support the given files');
-                        for (const file of file_input) {
+                        for (const file of files) {
                             alert(`File info: name - ${file.name}, size ${file.size}, type ${file.type}`);
                         }
                         return;
@@ -97,7 +97,7 @@
                 }
 
                 try {
-                    await navigator.share({ files, title, text, url });
+                    await navigator.share({  files, title, text, url });
                     alert('Successfully sent share');
                 } catch (error) {
                     alert('Error sharing: ' + error);
